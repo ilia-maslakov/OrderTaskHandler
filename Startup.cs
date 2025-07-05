@@ -32,20 +32,7 @@ public class Startup
         services.AddSwaggerGen();
 
         services.AddCamundaWorker("sampleWorker")
-            .AddHandler<SayHelloHandler>()
-            .ConfigurePipeline(pipeline =>
-            {
-                pipeline.Use(next => async context =>
-                {
-                    var logger = context.ServiceProvider.GetRequiredService<ILogger<Startup>>();
-                    logger.LogInformation("Started processing of task {Id} by worker {WorkerId}", context.Task.Id, context.Task.WorkerId);
-                    await next(context);
-                    logger.LogInformation("Finished processing of task {Id}", context.Task.Id);
-                });
-            });
-
-        services.AddCamundaWorker("sampleWorker2")
-            .AddHandler<SayHelloGuestHandler>()
+            .AddHandler<OrderTaskHandler>()
             .ConfigurePipeline(pipeline =>
             {
                 pipeline.Use(next => async context =>

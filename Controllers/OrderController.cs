@@ -15,21 +15,21 @@ public class OrderController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto dto)
     {
-        await _orderService.CreateAsync(dto);
-        return Ok();
+        var businessKey = await _orderService.CreateOrderAsync(dto);
+        return Ok(businessKey);
     }
 
     [HttpPost("edit")]
     public async Task<IActionResult> Edit([FromBody] EditOrderDto dto)
     {
-        await _orderService.EditAsync(dto);
+        await _orderService.EditOrderAsync(dto);
         return Ok();
     }
 
     [HttpPost("approve")]
     public async Task<IActionResult> Approve([FromBody] ApproveOrderDto dto)
     {
-        await _orderService.ApproveAsync(dto);
+        await _orderService.ApproveOrderAsync(dto);
         return Ok();
     }
 }
