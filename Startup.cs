@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SampleCamundaWorker.Handlers;
+using SampleCamundaWorker.Services;
 
 namespace SampleCamundaWorker;
 
@@ -26,6 +27,8 @@ public class Startup
         {
             client.BaseAddress = new Uri("http://localhost:8080/engine-rest");
         });
+
+        services.AddAppServices();
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();
