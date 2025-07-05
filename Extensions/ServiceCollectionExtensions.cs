@@ -1,0 +1,39 @@
+using System;
+using Camunda.Worker;
+using Camunda.Worker.Client;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using SampleCamundaWorker.Handlers;
+
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        services.AddExternalTaskClient(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:8080/engine-rest");
+        });
+
+        services.AddCamundaWorker("sampleWorker")
+            .AddHandler<OrderTaskHandler>()
+            .ConfigurePipeline(pipeline =>
+            {
+                pipeline.Use(next => async context =>
+                {
+                    var logger = context.ServiceProvider.GetRequiredService<ILogger<Startup>>();
+                    logger.LogInformation("Started processing of task {Id} by worker {WorkerId}", context.Task.Id, context.Task.WorkerId);
+                    await next(context);
+                    logger.LogInformation("Finished processing of task {Id}", context.Task.Id);
+                });
+            });
+
+        services.AddHttpClient<ICamundaClient, CamundaClient>(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:8080");
+        });
+
+        services.AddTransient<IOrderService, OrderService>();
+
+        return services;
+    }
+}
