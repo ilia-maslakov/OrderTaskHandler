@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SampleCamundaWorker.Extensions;
 using SampleCamundaWorker.Handlers;
 
 namespace SampleCamundaWorker;
@@ -22,7 +23,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddApplicationServices();
+        services.RegistrateApplicationServices();
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();

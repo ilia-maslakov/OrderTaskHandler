@@ -1,5 +1,9 @@
-﻿public class EditOrderDto
+﻿namespace SampleCamundaWorker.Ddos
 {
-    public string TaskId { get; set; }
-    public string Name { get; set; }
+    public class EditOrderDto
+    {
+        public required string BusinessKey { get; set; }
+        public required string Name { get; set; }
+
+    }
 }

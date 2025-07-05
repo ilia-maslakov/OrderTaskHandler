@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using SampleCamundaWorker.Ddos;
 
 /// <summary>
 /// Интерфейс для сервиса управления заказами.
