@@ -27,6 +27,10 @@ public class Startup
             client.BaseAddress = new Uri("http://localhost:8080/engine-rest");
         });
 
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
         services.AddCamundaWorker("sampleWorker")
             .AddHandler<SayHelloHandler>()
             .ConfigurePipeline(pipeline =>
@@ -63,6 +67,16 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseRouting();
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
+
         app.UseHealthChecks("/health");
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
     }
 }
