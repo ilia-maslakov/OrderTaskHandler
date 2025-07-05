@@ -22,27 +22,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddExternalTaskClient(client =>
-        {
-            client.BaseAddress = new Uri("http://localhost:8080/engine-rest");
-        });
+        services.AddApplicationServices();
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-
-        services.AddCamundaWorker("sampleWorker")
-            .AddHandler<OrderTaskHandler>()
-            .ConfigurePipeline(pipeline =>
-            {
-                pipeline.Use(next => async context =>
-                {
-                    var logger = context.ServiceProvider.GetRequiredService<ILogger<Startup>>();
-                    logger.LogInformation("Started processing of task {Id} by worker {WorkerId}", context.Task.Id, context.Task.WorkerId);
-                    await next(context);
-                    logger.LogInformation("Finished processing of task {Id}", context.Task.Id);
-                });
-            });
 
         services.AddHealthChecks();
     }
