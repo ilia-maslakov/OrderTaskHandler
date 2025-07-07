@@ -14,7 +14,7 @@ namespace SampleCamundaWorker.Extensions
         {
             services.AddExternalTaskClient(client =>
             {
-                client.BaseAddress = new Uri("http://localhost:8080/engine-rest");
+                client.BaseAddress = new Uri("http://localhost:8050/engine-rest");
             });
 
             services.AddTransient<IOrderService, OrderService>();
@@ -37,7 +37,7 @@ namespace SampleCamundaWorker.Extensions
 
             services.AddHttpClient<ICamundaClient, CamundaClient>(client =>
             {
-                client.BaseAddress = new Uri("http://localhost:8080");
+                client.BaseAddress = new Uri("http://localhost:8050");
             });
 
             services.AddTransient<IOrderService, OrderService>();
