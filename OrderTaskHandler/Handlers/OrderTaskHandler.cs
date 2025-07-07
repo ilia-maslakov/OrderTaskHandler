@@ -10,7 +10,6 @@ using SampleCamundaWorker.Infrastructure.Camunda.Models;
 namespace SampleCamundaWorker.Handlers
 {
     [HandlerTopics("orderTask", LockDuration = 10000)]
-    
     public class OrderTaskHandler : IExternalTaskHandler
     {
         public Task<IExecutionResult> HandleAsync(ExternalTask externalTask, CancellationToken cancellationToken)

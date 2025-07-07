@@ -1,0 +1,133 @@
+{
+  "$schema": "https://elsaworkflows.io/schemas/workflow-definition/v3.0.0/schema.json",
+  "id": "fdc5ad0108df59fc",
+  "definitionId": "process-t",
+  "name": "Test proc",
+  "createdAt": "2025-07-07T00:00:00.0000000Z",
+  "version": 1,
+  "toolVersion": "3.5.0.0",
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "outcomes": [],
+  "customProperties": {},
+  "isReadonly": false,
+  "isSystem": false,
+  "isLatest": true,
+  "isPublished": false,
+  "options": {
+    "autoUpdateConsumingWorkflows": false
+  },
+  "root": {
+    "id": "root-flowchart",
+    "nodeId": "process-t:root",
+    "name": "Main Flow",
+    "type": "Elsa.Flowchart",
+    "version": 1,
+    "customProperties": {
+      "notFoundConnections": [],
+      "canStartWorkflow": true,
+      "runAsynchronously": false
+    },
+    "metadata": {},
+    "activities": [
+      {
+        "id": "start",
+        "type": "Elsa.WriteLine",
+        "name": "Start",
+        "properties": {
+          "text": { "expression": { "type": "Literal", "value": "Начало процесса" } }
+        }
+      },
+      {
+        "id": "createOrder",
+        "type": "Elsa.UserTask",
+        "name": "Создать заявку",
+        "properties": {
+          "formKey": { "expression": { "type": "Literal", "value": "order/create" } }
+        }
+      },
+      {
+        "id": "editOrder",
+        "type": "Elsa.UserTask",
+        "name": "Редактировать заявку",
+        "properties": {
+          "formKey": { "expression": { "type": "Literal", "value": "order/edit" } }
+        }
+      },
+      {
+        "id": "orderTask",
+        "type": "Elsa.Http.SendHttpRequest",
+        "name": "Сервисная задача",
+        "properties": {
+          "url": { "expression": { "type": "Literal", "value": "http://external/order-task" } },
+          "method": "POST",
+          "content": { "expression": { "type": "Literal", "value": "{ \"Property\": \"Value\" }" } }
+        }
+      },
+      {
+        "id": "generateReport",
+        "type": "Elsa.Http.SendHttpRequest",
+        "name": "Генерация отчета",
+        "properties": {
+          "url": { "expression": { "type": "Literal", "value": "http://external/generate-report" } },
+          "method": "POST"
+        }
+      },
+      {
+        "id": "waitReport",
+        "type": "Elsa.MessageBus.ReceiveMessage",
+        "name": "Ожидание отчета",
+        "properties": {
+          "messageType": { "expression": { "type": "Literal", "value": "ReportGenerated" } }
+        }
+      },
+      {
+        "id": "sendReport",
+        "type": "Elsa.Http.SendHttpRequest",
+        "name": "Отправка отчета",
+        "properties": {
+          "url": { "expression": { "type": "Literal", "value": "http://external/send-report" } },
+          "method": "POST"
+        }
+      },
+      {
+        "id": "approveTask",
+        "type": "Elsa.UserTask",
+        "name": "Одобрение заявки",
+        "properties": {
+          "formKey": { "expression": { "type": "Literal", "value": "order/approve" } }
+        }
+      },
+      {
+        "id": "decision",
+        "type": "Elsa.Flow.Switch",
+        "name": "Решение",
+        "properties": {
+          "expression": { "expression": { "type": "JavaScript", "value": "input.approve" } }
+        }
+      },
+      {
+        "id": "end",
+        "type": "Elsa.WriteLine",
+        "name": "Конец",
+        "properties": {
+          "text": { "expression": { "type": "Literal", "value": "Процесс завершен" } }
+        }
+      }
+    ],
+    "connections": [
+      { "sourceActivityId": "start", "targetActivityId": "createOrder" },
+      { "sourceActivityId": "createOrder", "targetActivityId": "editOrder" },
+      { "sourceActivityId": "editOrder", "targetActivityId": "orderTask" },
+      { "sourceActivityId": "orderTask", "targetActivityId": "generateReport" },
+      { "sourceActivityId": "generateReport", "targetActivityId": "waitReport" },
+      { "sourceActivityId": "waitReport", "targetActivityId": "sendReport" },
+      { "sourceActivityId": "sendReport", "targetActivityId": "approveTask" },
+      { "sourceActivityId": "approveTask", "targetActivityId": "decision" },
+      { "sourceActivityId": "decision", "targetActivityId": "end", "outcome": "yes" },
+      { "sourceActivityId": "decision", "targetActivityId": "editOrder", "outcome": "no" }
+    ],
+    "variables": []
+  }
+}

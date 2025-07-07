@@ -13,9 +13,4 @@
   <ItemGroup>
     <Folder Include="Handlers\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="tests/**" />
-  </ItemGroup>
-
 </Project>
