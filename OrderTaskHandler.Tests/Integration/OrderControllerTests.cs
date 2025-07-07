@@ -1,7 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -15,11 +21,23 @@ namespace SampleCamundaWorker.Tests.Integration
     {
         private readonly WebApplicationFactory<Program> _factory;
         private readonly Mock<IOrderService> _serviceMock = new();
+        private const string Key = "TestKey1234567890";
+        private const string Issuer = "TestIssuer";
+        private const string Audience = "TestAudience";
 
         public OrderControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory.WithWebHostBuilder(builder =>
             {
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string>
+                    {
+                        ["Jwt:Key"] = Key,
+                        ["Jwt:Issuer"] = Issuer,
+                        ["Jwt:Audience"] = Audience
+                    });
+                });
                 builder.ConfigureServices(services =>
                 {
                     services.AddSingleton<IOrderService>(_serviceMock.Object);
@@ -34,6 +52,7 @@ namespace SampleCamundaWorker.Tests.Integration
             _serviceMock.Setup(s => s.CreateOrderAsync(It.IsAny<CreateOrderDto>())).ReturnsAsync("bk");
             _serviceMock.Setup(s => s.ApproveOrderAsync(It.IsAny<ApproveOrderDto>())).Returns(Task.CompletedTask);
             using var client = _factory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GenerateToken());
             var createDto = new CreateOrderDto
             {
                 Name = "order",
@@ -63,6 +82,7 @@ namespace SampleCamundaWorker.Tests.Integration
             _serviceMock.Setup(s => s.CreateOrderAsync(It.IsAny<CreateOrderDto>())).ReturnsAsync("bk2");
             _serviceMock.Setup(s => s.ApproveOrderAsync(It.IsAny<ApproveOrderDto>())).Returns(Task.CompletedTask);
             using var client = _factory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GenerateToken());
             var createDto = new CreateOrderDto
             {
                 Name = "order2",
@@ -83,6 +103,19 @@ namespace SampleCamundaWorker.Tests.Integration
             Assert.Equal(HttpStatusCode.OK, approveResponse.StatusCode);
             _serviceMock.Verify(s => s.CreateOrderAsync(It.Is<CreateOrderDto>(d => d.Name == "order2")), Times.Once);
             _serviceMock.Verify(s => s.ApproveOrderAsync(It.Is<ApproveOrderDto>(d => d.Approve)), Times.Once);
+        }
+
+        private static string GenerateToken()
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: Issuer,
+                audience: Audience,
+                claims: new[] { new Claim(ClaimTypes.Role, "User") },
+                expires: DateTime.UtcNow.AddMinutes(30),
+                signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
