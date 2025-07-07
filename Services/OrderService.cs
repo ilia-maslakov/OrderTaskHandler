@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using SampleCamundaWorker.Ddos;
 using SampleCamundaWorker.Infrastructure.Camunda.Models;
@@ -10,19 +9,14 @@ namespace SampleCamundaWorker.Services
     /// <summary>
     /// Сервис для управления заказами.
     /// </summary>
-    public class OrderService : IOrderService
+    /// <remarks>
+    /// Инициализирует новый экземпляр сервиса заказов.
+    /// </remarks>
+    /// <param name="camunda"></param>
+    public class OrderService(ICamundaClient camunda) : IOrderService
     {
-        private readonly ICamundaClient _camunda;
+        private readonly ICamundaClient _camunda = camunda;
         const string BPMN_ORDER_PROCESS_NAME = "process-t";
-
-        /// <summary>
-        /// Инициализирует новый экземпляр сервиса заказов.
-        /// </summary>
-        /// <param name="camunda"></param>
-        public OrderService(ICamundaClient camunda)
-        {
-            _camunda = camunda;
-        }
 
         /// <summary>
         /// Создает новый заказ.
@@ -36,10 +30,10 @@ namespace SampleCamundaWorker.Services
 
             var variables = new CamundaVariables
             {
-                ["name"] = new CamundaVariable { Value = order.Name, Type = "String" },
-                ["orderNumber"] = new CamundaVariable { Value = order.OrderNumber, Type = "String" },
-                ["orderDate"] = new CamundaVariable { Value = order.OrderDate.ToString("o"), Type = "String" },
-                ["remarks"] = new CamundaVariable { Value = order.Remarks, Type = "String" }
+                ["name"] = new CamundaVariable(order.Name),
+                ["orderNumber"] = new CamundaVariable(order.OrderNumber),
+                ["orderDate"] = new CamundaVariable(order.OrderDate.ToString("o")),
+                ["remarks"] = new CamundaVariable(order.Remarks)
             };
 
             await _camunda.StartProcessInstanceAsync(BPMN_ORDER_PROCESS_NAME, businessKey, variables);
@@ -59,7 +53,7 @@ namespace SampleCamundaWorker.Services
             const string formKey = "order/edit";
             var variables = new CamundaVariables
             {
-                ["name"] = new CamundaVariable { Value = order.Name, Type = "String" },
+                ["name"] = new CamundaVariable(order.Name),
             };
             await _camunda.CompleteUserTaskAsync(order.BusinessKey, formKey, variables);
         }
@@ -74,8 +68,8 @@ namespace SampleCamundaWorker.Services
             const string formKey = "order/approve";
             var variables = new CamundaVariables
             {
-                ["approve"] = new CamundaVariable { Value = dto.Approve ? "yes" : "no", Type = "String" },
-                ["remarks"] = new CamundaVariable { Value = dto.Remarks, Type = "String" }
+                ["approve"] = new CamundaVariable(dto.Approve ? "yes" : "no"),
+                ["remarks"] = new CamundaVariable(dto.Remarks)
             };
             await _camunda.CompleteUserTaskAsync(dto.TaskId, formKey, variables);
         }

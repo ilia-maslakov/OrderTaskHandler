@@ -17,8 +17,13 @@ namespace SampleCamundaWorker.Extensions
                 client.BaseAddress = new Uri("http://localhost:8080/engine-rest");
             });
 
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IReportService, ReportService>();
+
             services.AddCamundaWorker("sampleWorker")
                 .AddHandler<OrderTaskHandler>()
+                .AddHandler<GenerateReportHandler>()
+                .AddHandler<SendReportHandler>()
                 .ConfigurePipeline(pipeline =>
                 {
                     pipeline.Use(next => async context =>

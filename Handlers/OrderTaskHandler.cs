@@ -17,16 +17,8 @@ namespace SampleCamundaWorker.Handlers
         {
             var variables = new CamundaVariables
             {
-                ["status"] = new CamundaVariable
-                {
-                    Value = "Approved",
-                    Type = "String"
-                },
-                ["timestamp"] = new CamundaVariable
-                {
-                    Value = DateTime.UtcNow.ToString("o"),
-                    Type = "String"
-                }
+                ["status"] = new CamundaVariable("Approved"),
+                ["timestamp"] = new CamundaVariable(DateTime.UtcNow.ToString("o"))
             };
 
             var resultVariables = new Dictionary<string, VariableBase>

@@ -1,29 +1,32 @@
 ﻿using System.Threading.Tasks;
 using SampleCamundaWorker.Ddos;
 
-/// <summary>
-/// Интерфейс для сервиса управления заказами.
-/// </summary>
-public interface IOrderService
+namespace SampleCamundaWorker.Services
 {
     /// <summary>
-    /// Создает новый заказ.
+    /// Интерфейс для сервиса управления заказами.
     /// </summary>
-    /// <param name="dto"></param>
-    /// <returns></returns>
-    Task<string> CreateOrderAsync(CreateOrderDto dto);
+    public interface IOrderService
+    {
+        /// <summary>
+        /// Создает новый заказ.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task<string> CreateOrderAsync(CreateOrderDto dto);
 
-    /// <summary>
-    /// Редактирует существующий заказ.
-    /// </summary>
-    /// <param name="dto"></param>
-    /// <returns></returns>
-    Task EditOrderAsync(EditOrderDto dto);
+        /// <summary>
+        /// Редактирует существующий заказ.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task EditOrderAsync(EditOrderDto dto);
 
-    /// <summary>
-    /// Одобряет заказ, который был создан ранее и ожидает одобрения.
-    /// </summary>
-    /// <param name="dto"></param>
-    /// <returns></returns>
-    Task ApproveOrderAsync(ApproveOrderDto dto);
+        /// <summary>
+        /// Одобряет заказ, который был создан ранее и ожидает одобрения.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task ApproveOrderAsync(ApproveOrderDto dto);
+    }
 }

@@ -1,25 +1,15 @@
-using System;
-using Camunda.Worker;
-using Camunda.Worker.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SampleCamundaWorker.Extensions;
-using SampleCamundaWorker.Handlers;
 
 namespace SampleCamundaWorker;
 
-public class Startup
+public class Startup(IConfiguration configuration)
 {
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
-    public IConfiguration Configuration { get; }
+    public IConfiguration Configuration { get; } = configuration;
 
     public void ConfigureServices(IServiceCollection services)
     {

@@ -1,19 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SampleCamundaWorker.Ddos;
+using SampleCamundaWorker.Services;
 
 namespace SampleCamundaWorker.Controllers
 {
     [ApiController]
     [Route("api/order")]
-    public class OrderController : ControllerBase
+    public class OrderController(IOrderService orderService) : ControllerBase
     {
-        private readonly IOrderService _orderService;
-
-        public OrderController(IOrderService orderService)
-        {
-            _orderService = orderService;
-        }
+        private readonly IOrderService _orderService = orderService;
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateOrderDto dto)

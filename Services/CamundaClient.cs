@@ -9,18 +9,12 @@ using SampleCamundaWorker.Infrastructure.Camunda.Models;
 
 namespace SampleCamundaWorker.Services
 {
-
     /// <summary>
     /// Клиент для взаимодействия с Camunda BPM.
     /// </summary>
-    public class CamundaClient : ICamundaClient
+    public class CamundaClient(HttpClient http) : ICamundaClient
     {
-        private readonly HttpClient _http;
-
-        public CamundaClient(HttpClient http)
-        {
-            _http = http;
-        }
+        private readonly HttpClient _http = http;
 
         /// <inheritdoc />
         public async Task StartProcessInstanceAsync(string processKey, string businessKey, CamundaVariables variables)
@@ -55,5 +49,43 @@ namespace SampleCamundaWorker.Services
             return result;
         }
 
+        /// <inheritdoc />
+        public async Task CompleteExternalTaskAsync(string taskId, CamundaVariables variables)
+        {
+            var payload = new
+            {
+                variables = variables.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => new
+                    {
+                        value = kvp.Value.Value,
+                        type = kvp.Value.Type
+                    })
+            };
+
+            var response = await _http.PostAsJsonAsync($"/engine-rest/external-task/{taskId}/complete", payload);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        /// <inheritdoc />
+        public async Task CorrelateMessageAsync(string messageName, string businessKey, CamundaVariables variables)
+        {
+            var payload = new
+            {
+                messageName,
+                businessKey,
+                variables = variables.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => new
+                    {
+                        value = kvp.Value.Value,
+                        type = kvp.Value.Type
+                    })
+            };
+
+            var response = await _http.PostAsJsonAsync("/engine-rest/message", payload);
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
