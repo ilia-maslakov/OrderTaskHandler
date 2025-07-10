@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using SampleCamundaWorker.Ddos;
-using SampleCamundaWorker.Infrastructure.Camunda.Models;
+using OrderTaskHandler.Ddos;
+using OrderTaskHandler.Infrastructure.Camunda.Models;
 
-namespace SampleCamundaWorker.Services
+namespace OrderTaskHandler.Services
 {
     /// <summary>
     /// Интерфейс для взаимодействия с Camunda BPM.

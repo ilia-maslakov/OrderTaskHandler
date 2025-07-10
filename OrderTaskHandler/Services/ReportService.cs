@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SampleCamundaWorker.Infrastructure.Camunda.Models;
+using OrderTaskHandler.Infrastructure.Camunda.Models;
 
-namespace SampleCamundaWorker.Services
+namespace OrderTaskHandler.Services
 {
     public class ReportService(ICamundaClient camundaClient) : IReportService
     {

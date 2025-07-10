@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SampleCamundaWorker.Ddos;
-using SampleCamundaWorker.Services;
+using OrderTaskHandler.Ddos;
+using OrderTaskHandler.Services;
 
-namespace SampleCamundaWorker.Controllers
+namespace OrderTaskHandler.Controllers
 {
     [ApiController]
     [Route("api/order")]
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "hr,mp")]
     public class OrderController(IOrderService orderService) : ControllerBase
     {
         private readonly IOrderService _orderService = orderService;

@@ -3,10 +3,11 @@ using Camunda.Worker;
 using Camunda.Worker.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SampleCamundaWorker.Handlers;
-using SampleCamundaWorker.Services;
+using OrderTaskHandler;
+using OrderTaskHandler.Handlers;
+using OrderTaskHandler.Services;
 
-namespace SampleCamundaWorker.Extensions
+namespace OrderTaskHandler.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -21,7 +22,7 @@ namespace SampleCamundaWorker.Extensions
             services.AddTransient<IReportService, ReportService>();
 
             services.AddCamundaWorker("sampleWorker")
-                .AddHandler<OrderTaskHandler>()
+                .AddHandler<CreateOrderTaskHandler>()
                 .AddHandler<GenerateReportHandler>()
                 .AddHandler<SendReportHandler>()
                 .ConfigurePipeline(pipeline =>
@@ -40,6 +41,7 @@ namespace SampleCamundaWorker.Extensions
                 client.BaseAddress = new Uri("http://localhost:8050");
             });
 
+            services.AddScoped<IAuthorizeService, AuthorizeService>();
             services.AddTransient<IOrderService, OrderService>();
 
             return services;

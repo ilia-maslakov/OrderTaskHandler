@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using SampleCamundaWorker.Ddos;
-using SampleCamundaWorker.Infrastructure.Camunda.Models;
+using OrderTaskHandler.Ddos;
+using OrderTaskHandler.Infrastructure.Camunda.Models;
 
-namespace SampleCamundaWorker.Services
+namespace OrderTaskHandler.Services
 {
     /// <summary>
     /// Клиент для взаимодействия с Camunda BPM.

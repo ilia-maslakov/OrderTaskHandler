@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SampleCamundaWorker.Ddos;
+using OrderTaskHandler.Ddos;
 
-namespace SampleCamundaWorker.Services
+namespace OrderTaskHandler.Services
 {
     /// <summary>
     /// Интерфейс для сервиса управления заказами.

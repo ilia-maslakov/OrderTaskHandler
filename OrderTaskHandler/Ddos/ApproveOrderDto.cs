@@ -1,4 +1,4 @@
-﻿namespace SampleCamundaWorker.Ddos
+﻿namespace OrderTaskHandler.Ddos
 {
     public class ApproveOrderDto
     {

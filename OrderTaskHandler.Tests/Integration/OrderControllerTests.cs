@@ -1,21 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Moq;
-using SampleCamundaWorker.Ddos;
-using SampleCamundaWorker.Services;
+using OrderTaskHandler;
+using OrderTaskHandler.Ddos;
+using OrderTaskHandler.Services;
 using Xunit;
 
-namespace SampleCamundaWorker.Tests.Integration
+namespace OrderTaskHandler.Tests.Integration
 {
     public class OrderControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {

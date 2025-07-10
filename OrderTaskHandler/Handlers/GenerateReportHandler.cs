@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Camunda.Worker;
 using Camunda.Worker.Variables;
-using SampleCamundaWorker.Services;
+using OrderTaskHandler.Services;
 
-namespace SampleCamundaWorker.Handlers
+namespace OrderTaskHandler.Handlers
 {
     /// <summary>
     /// Инициализирует новый экземпляр обработчика задач генерации отчетов.

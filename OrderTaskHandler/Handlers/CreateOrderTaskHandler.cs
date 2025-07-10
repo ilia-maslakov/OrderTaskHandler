@@ -5,12 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Camunda.Worker;
 using Camunda.Worker.Variables;
-using SampleCamundaWorker.Infrastructure.Camunda.Models;
+using OrderTaskHandler.Infrastructure.Camunda.Models;
 
-namespace SampleCamundaWorker.Handlers
+namespace OrderTaskHandler.Handlers
 {
     [HandlerTopics("orderTask", LockDuration = 10000)]
-    public class OrderTaskHandler : IExternalTaskHandler
+    public class CreateOrderTaskHandler : IExternalTaskHandler
     {
         public Task<IExecutionResult> HandleAsync(ExternalTask externalTask, CancellationToken cancellationToken)
         {

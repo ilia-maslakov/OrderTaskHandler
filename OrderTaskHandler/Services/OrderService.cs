@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SampleCamundaWorker.Ddos;
-using SampleCamundaWorker.Infrastructure.Camunda.Models;
+using OrderTaskHandler.Ddos;
+using OrderTaskHandler.Infrastructure.Camunda.Models;
 
-namespace SampleCamundaWorker.Services
+namespace OrderTaskHandler.Services
 {
 
     /// <summary>
@@ -33,7 +33,8 @@ namespace SampleCamundaWorker.Services
                 ["name"] = new CamundaVariable(order.Name),
                 ["orderNumber"] = new CamundaVariable(order.OrderNumber),
                 ["orderDate"] = new CamundaVariable(order.OrderDate.ToString("o")),
-                ["remarks"] = new CamundaVariable(order.Remarks)
+                ["remarks"] = new CamundaVariable(order.Remarks),
+                ["neededit"] = new CamundaVariable("no"),
             };
 
             await _camunda.StartProcessInstanceAsync(BPMN_ORDER_PROCESS_NAME, businessKey, variables);

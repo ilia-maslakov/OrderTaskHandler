@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SampleCamundaWorker.Infrastructure.Camunda.Models
+namespace OrderTaskHandler.Infrastructure.Camunda.Models
 {
     public class CamundaVariable(object value, string type = "String")
     {

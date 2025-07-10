@@ -1,4 +1,4 @@
-﻿namespace SampleCamundaWorker.Infrastructure.Camunda.Models
+﻿namespace OrderTaskHandler.Infrastructure.Camunda.Models
 {
     /// <summary>
     /// Представляет переменные, используемые в Camunda BPM для пользовательских задач и процессов.
